@@ -1,11 +1,11 @@
 import { useEffect } from "react";
+import { api } from "../../services/axios";
 import { Container } from "./styles";
 
 export function TransactionList() {
   useEffect(() => {
-    fetch('http://localhost:3000/api/transactions')
-      .then((response) => response.json())
-      .then((json) => console.log(json))
+    api.get('transactions')
+      .then((response) => console.log(response.data))
       .catch((error) => console.error(error));
   }, []);
 
