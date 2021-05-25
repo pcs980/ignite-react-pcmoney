@@ -1,11 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { api } from "../../services/axios";
 import { Container } from "./styles";
 
+interface Transaction {
+  id: number;
+  title: string;
+  type: string;
+  amount: number;
+  category: string;
+  created_at: string;
+}
+
 export function TransactionList() {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+
   useEffect(() => {
     api.get('transactions')
-      .then((response) => console.log(response.data))
+      .then((response) => setTransactions(response.data))
       .catch((error) => console.error(error));
   }, []);
 
@@ -21,18 +32,27 @@ export function TransactionList() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Desenvolvimento de website</td>
-            <td className="deposit">R$ 12.000,00</td>
-            <td>Desenvolvimento</td>
-            <td>20/03/2021</td>
-          </tr>
-          <tr>
-            <td>Aluguel</td>
-            <td className="withdraw">- R$ 1.000,00</td>
-            <td>Moradia</td>
-            <td>05/03/2021</td>
-          </tr>
+          {
+            transactions.map((t) => (
+              <tr key={t.id}>
+                <td>{t.title}</td>
+                <td className={t.type}>
+                  {
+                    new Intl.NumberFormat('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL'
+                    }).format(t.amount)
+                  }
+                </td>
+                <td>{t.category}</td>
+                <td>
+                  {
+                    new Intl.DateTimeFormat('pt-BR').format(new Date(t.created_at))
+                  }
+                </td>
+              </tr>
+            ))
+          }
         </tbody>
       </table>
     </Container>
