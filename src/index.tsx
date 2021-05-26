@@ -14,15 +14,15 @@ createServer({
         title: 'Desenvolvimento Web',
         category: 'Dev',
         type: 'deposit',
-        created_at: new Date('2021-04-18 16:52:00'),
+        created_at: new Date('2021-04-05 16:52:00'),
         amount: 5000
       }, {
         id: 2,
         title: 'Aluguel',
         category: 'Moradia',
         type: 'withdraw',
-        created_at: new Date('2021-04-05 08:00:00'),
-        amount: -1000
+        created_at: new Date('2021-04-10 08:00:00'),
+        amount: 1000
       }]
     });
   },
@@ -33,7 +33,10 @@ createServer({
 
     this.post('/transactions', (schema, request) => {
       const data = JSON.parse(request.requestBody);
-      return schema.create('transaction', data);
+      return schema.create('transaction', {
+        ...data,
+        created_at: new Date(),
+      }).attrs;
     });
   }
 });

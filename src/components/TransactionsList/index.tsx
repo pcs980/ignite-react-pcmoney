@@ -1,24 +1,8 @@
-import { useEffect, useState } from "react";
-import { api } from "../../services/axios";
+import { useTransactions } from "../../hooks/useTransactions";
 import { Container } from "./styles";
 
-interface Transaction {
-  id: number;
-  title: string;
-  type: string;
-  amount: number;
-  category: string;
-  created_at: string;
-}
-
 export function TransactionList() {
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
-
-  useEffect(() => {
-    api.get('transactions')
-      .then((response) => setTransactions(response.data))
-      .catch((error) => console.error(error));
-  }, []);
+  const { transactions } = useTransactions();
 
   return (
     <Container>
